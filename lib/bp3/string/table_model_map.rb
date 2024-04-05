@@ -4,6 +4,8 @@ module Bp3
   module String
     # TableModelMap provides for mappings between tables and models
     class TableModelMap
+      include Subclassable
+
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
 
@@ -31,7 +33,6 @@ module Bp3
 
           table_name = table_name.split('.').last # remove the schema
           model_name = determine_model_name(model).encode(enc)
-          # puts "model_name for #{model.name} is #{model_name}"
           hash[table_name] = model_name
           hash[table_name.singularize] = model_name
         end
@@ -43,33 +44,6 @@ module Bp3
         return determine_model_name(model.descendants.first) if subclassed?(model)
 
         model.name
-      end
-
-      # look for any ancestors of *model* that share the same table name *and* the model
-      # is an STI model, as determined by the presence of a 'type' columhn
-      def self.sti_subclass?(model)
-        table_name = model.table_name
-        out = model.ancestors[1..].any? do |class_or_module|
-          if class_or_module.is_a?(Module) && !class_or_module.is_a?(Class)
-            false
-          elsif class_or_module.table_name == table_name
-            sti_model?(class_or_module)
-          end
-        rescue StandardError
-          false
-        end
-        # puts "model #{model.name} as an STI subclass" if out
-        out
-      end
-
-      def self.sti_model?(klass)
-        klass.columns.map(&:name).any? { |name| name == 'type' }
-      end
-
-      def self.subclassed?(model)
-        out = model.descendants.any? && !sti_model?(model)
-        # puts "model #{model.name} has descendants and is not an STI model" if out
-        out
       end
 
       def self.hash

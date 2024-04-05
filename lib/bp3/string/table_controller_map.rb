@@ -4,6 +4,8 @@ module Bp3
   module String
     # TableControllerMap provides for mappings between tables and controllers
     class TableControllerMap
+      include Subclassable
+
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
 
@@ -28,29 +30,12 @@ module Bp3
           table_name = model.table_name
           next if table_name.blank?
 
-          controller_name = "#{model.name.pluralize}Controller"
           table_name = model.name.tableize.tr('/', '_') if sti_subclass?(model)
+          controller_name = "#{model.name.pluralize}Controller"
           hash[table_name] = controller_name
           hash[table_name.singularize] = controller_name
         end
         hash
-      end
-
-      def self.sti_subclass?(model)
-        table_name = model.table_name
-        model.ancestors[1..].any? do |class_or_module|
-          if class_or_module.is_a?(Module) && !class_or_module.is_a?(Class)
-            false
-          elsif class_or_module.table_name == table_name
-            sti_model?(class_or_module)
-          end
-        rescue StandardError
-          false
-        end
-      end
-
-      def self.sti_model?(klass)
-        class_or_module.columns.map(&:name).any? { |name| name == 'type' }
       end
 
       def self.hash
