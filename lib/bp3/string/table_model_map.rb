@@ -42,11 +42,15 @@ module Bp3
           if class_or_module.is_a?(Module) && !class_or_module.is_a?(Class)
             false
           elsif class_or_module.table_name == table_name
-            true
+            sti_model?(class_or_module)
           end
         rescue StandardError
           false
         end
+      end
+
+      def self.sti_model?(klass)
+        class_or_module.columns.map(&:name).any? { |name| name == 'type' }
       end
 
       def self.hash
