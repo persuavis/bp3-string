@@ -7,7 +7,7 @@ module Bp3
 
       class_methods do
         # look for any ancestors of *model* that share the same table name *and* the model
-        # is an STI model, as determined by the presence of a 'type' columhn
+        # is an STI model, as determined by the presence of a 'type' column
         def sti_subclass?(model)
           table_name = model.table_name
           model.ancestors[1..].any? do |class_or_module|
