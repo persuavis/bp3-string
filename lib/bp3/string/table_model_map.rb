@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_record'
+
 module Bp3
   module String
     # TableModelMap provides for mappings between tables and models
@@ -9,8 +11,12 @@ module Bp3
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
 
+      def self.testing?
+        Rails.env.test?
+      end
+
       def self.cached_hash
-        return build_hash if Rails.env.test?
+        return build_hash if testing?
         return @cached_hash if @cached_hash.present?
 
         CACHED_HASH_MUTEX.synchronize do
@@ -25,7 +31,7 @@ module Bp3
       end
 
       def self.build_hash
-        enc = "string".encoding # TODO: not sure why encoding sometimes doesn't match
+        enc = 'string'.encoding # TODO: not sure why encoding sometimes doesn't match
         hash = {}
         ActiveRecord::Base.descendants.each do |model|
           table_name = model.table_name
