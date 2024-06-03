@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bp3-string (0.1.0)
+    bp3-string (0.1.1)
       activerecord (~> 7.1)
       activesupport (>= 7.1.2, < 8)
       railties (~> 7.1)
@@ -167,4 +167,4 @@ DEPENDENCIES
   rubocop-rspec (~> 2.25)
 
 BUNDLED WITH
-   2.4.22
+   2.5.11
