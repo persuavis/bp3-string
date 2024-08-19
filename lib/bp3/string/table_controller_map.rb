@@ -2,7 +2,7 @@
 
 module Bp3
   module String
-    # TableControllerMap provides for mappings between tables and controllers
+    # TableControllerMap provides for mappings between table-like strings and controller class names
     class TableControllerMap
       include Subclassable
 

@@ -4,7 +4,7 @@ require 'active_record'
 
 module Bp3
   module String
-    # TableModelMap provides for mappings between tables and models
+    # TableModelMap provides for mappings between tables and model class names
     class TableModelMap
       include Subclassable
 
