@@ -6,7 +6,7 @@ module Bp3
   module String
     module Controllerize
       def controllerize
-        TableControllerMap.hash[self] || "#{classify}Controller"
+        TableControllerMap.hash[self] || "#{classify.pluralize}Controller"
       end
     end
   end
