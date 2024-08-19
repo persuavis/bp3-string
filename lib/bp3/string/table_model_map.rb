@@ -11,8 +11,9 @@ module Bp3
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
 
+      # override in testing if needed
       def self.testing?
-        Rails.env.test?
+        false
       end
 
       def self.cached_hash
