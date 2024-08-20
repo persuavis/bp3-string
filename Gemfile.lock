@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bp3-string (0.1.1)
+    bp3-string (0.1.2)
       activerecord (>= 7.1.2, < 8)
       activesupport (>= 7.1.2, < 8)
       railties (>= 7.1.2, < 8)
