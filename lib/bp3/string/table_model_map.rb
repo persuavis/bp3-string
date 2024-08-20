@@ -32,25 +32,7 @@ module Bp3
       end
 
       def self.build_hash
-        enc = 'string'.encoding # TODO: not sure why encoding sometimes doesn't match
-        hash = {}
-        ActiveRecord::Base.descendants.each do |model|
-          table_name = model.table_name
-          next if table_name.blank?
-
-          table_name = table_name.split('.').last # remove the schema
-          model_name = determine_model_name(model).encode(enc)
-          hash[table_name] = model_name
-          hash[table_name.singularize] = model_name
-        end
-        hash
-      end
-
-      def self.determine_model_name(model)
-        return determine_model_name(model.superclass) if sti_subclass?(model)
-        return determine_model_name(model.descendants.first) if subclassed?(model)
-
-        model.name
+        new.build_hash
       end
 
       def self.hash
@@ -59,6 +41,36 @@ module Bp3
 
       def hash
         self.class.hash
+      end
+
+      def build_hash
+        encoding = 'string'.encoding # TODO: not sure why encoding sometimes doesn't match
+        hash = {}
+        ActiveRecord::Base.descendants.each do |model|
+          table_name = model.table_name
+          next if table_name.blank?
+
+          table_name = table_name.split('.').last # remove the schema
+          model_name = determine_model_name(model).encode(encoding)
+          hash[table_name] = model_name
+          hash[table_name.singularize] = model_name
+        end
+        hash
+      end
+
+      def determine_model_name(model)
+        return determine_model_name(model.superclass) if sti_subclass?(model)
+        return determine_model_name(model.descendants.first) if subclassed?(model)
+
+        model.name
+      end
+
+      def sti_subclass?(model)
+        self.class.sti_subclass?(model)
+      end
+
+      def subclassed?(model)
+        self.class.subclassed?(model)
       end
     end
   end

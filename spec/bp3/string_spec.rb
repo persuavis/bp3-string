@@ -2,12 +2,23 @@
 
 require_relative '../../lib/bp3/string/test'
 
-class Test < ActiveRecord::Base
+# require 'action_view'
+require 'action_controller/railtie'
+
+module TestSpace
+  class TestModel < ActiveRecord::Base
+    self.table_name = 'test_space_test_models'
+  end
+
+  class TestModelsController < ::ActionController::Base
+  end
+
+  class TestModelController < ::ActionController::Base
+  end
 end
 
 # rubocop:disable RSpec/ExpectActual
 RSpec.describe Bp3::String do
-
   before do
     String.include Bp3::String::Modelize
     String.include Bp3::String::Controllerize
@@ -28,6 +39,7 @@ RSpec.describe Bp3::String do
       expect('some_string'.modelize).to eq('SomeString')
       expect('test'.modelize).to eq('Test')
       expect('bp3_string_test'.modelize).to eq('Bp3::String::Test')
+      expect('test_space_test_models'.modelize).to eq('TestSpace::TestModel')
     end
   end
 
@@ -36,12 +48,15 @@ RSpec.describe Bp3::String do
       expect('some string').to respond_to(:controllerize)
     end
 
-    it 'controllerizes' do
-      allow(Bp3::String::TableControllerMap).to receive(:testing?).and_return(false)
-
-      expect('some_string'.controllerize).to eq('SomeStringController')
+    it 'controllerizes basic cases' do
+      expect('some_string'.controllerize).to eq('SomeStringsController')
       expect('test'.controllerize).to eq('TestsController')
       expect('bp3_string_test'.controllerize).to eq('Bp3::String::TestsController')
+    end
+
+    it 'controllerizes complex cases' do
+      expect('test_space_test_models'.controllerize).to eq('TestSpace::TestModelsController')
+      expect('test_space_test_model'.controllerize).to eq('TestSpace::TestModelsController')
     end
   end
 end

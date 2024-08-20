@@ -30,6 +30,30 @@ module Bp3
       end
 
       def self.build_hash
+        new.build_hash
+      end
+
+
+      def self.hash
+        cached_hash
+      end
+
+      def hash
+        self.class.hash
+      end
+
+      def build_hash
+        @encoding = 'string'.encoding # TODO: not sure why encoding sometimes doesn't match
+        @ar_hash = build_hash_from_active_record
+        @ac_hash = build_hash_from_action_controller
+        @ar_hash.merge(@ac_hash)
+      end
+
+      private
+
+      attr_reader :ar_hash, :ac_hash, :encoding
+
+      def build_hash_from_active_record
         hash = {}
         ActiveRecord::Base.descendants.each do |model|
           table_name = model.table_name
@@ -43,12 +67,33 @@ module Bp3
         hash
       end
 
-      def self.hash
-        cached_hash
+      def build_hash_from_action_controller
+        hash = {}
+        ActionController::Base.descendants.each do |controller|
+          hash.merge!(build_hash_from_controller(controller))
+        end
+        hash
       end
 
-      def hash
-        self.class.hash
+      def build_hash_from_controller(controller)
+        hash = {}
+        if controller.descendants.empty?
+          if controller.name.present?
+            controller_name = controller.name.encode(encoding)
+            tableish_name = controller_name.gsub(/Controller\z/, '').underscore.tr('/', '_').pluralize
+            hash[tableish_name] = controller_name unless @ar_hash.key?(tableish_name)
+            hash[tableish_name.singularize] = controller_name unless @ar_hash.key?(tableish_name.singularize)
+          end
+        else
+          controller.descendants.each do |ctrlr|
+            hash.merge!(build_hash_from_controller(ctrlr))
+          end
+        end
+        hash
+      end
+
+      def sti_subclass?(model)
+        self.class.sti_subclass?(model)
       end
     end
   end
