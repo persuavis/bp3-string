@@ -3,16 +3,9 @@
 module Bp3
   module String
     # TableControllerMap provides for mappings between table-like strings and controller class names
-    class TableControllerMap
-      include Subclassable
-
+    class TableControllerMap < MapperBase
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
-
-      # override in testing if needed
-      def self.testing?
-        false
-      end
 
       def self.cached_hash
         return build_hash if testing?
@@ -23,23 +16,6 @@ module Bp3
 
           @cached_hash = build_hash
         end
-      end
-
-      def self.reset_cached_hash
-        @cached_hash = nil
-      end
-
-      def self.build_hash
-        new.build_hash
-      end
-
-
-      def self.hash
-        cached_hash
-      end
-
-      def hash
-        self.class.hash
       end
 
       def build_hash
@@ -90,10 +66,6 @@ module Bp3
           end
         end
         hash
-      end
-
-      def sti_subclass?(model)
-        self.class.sti_subclass?(model)
       end
     end
   end

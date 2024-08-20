@@ -5,16 +5,9 @@ require 'active_record'
 module Bp3
   module String
     # TableModelMap provides for mappings between tables and model class names
-    class TableModelMap
-      include Subclassable
-
+    class TableModelMap < MapperBase
       @cached_hash = nil
       CACHED_HASH_MUTEX = Mutex.new
-
-      # override in testing if needed
-      def self.testing?
-        false
-      end
 
       def self.cached_hash
         return build_hash if testing?
@@ -25,22 +18,6 @@ module Bp3
 
           @cached_hash = build_hash
         end
-      end
-
-      def self.reset_cached_hash
-        @cached_hash = nil
-      end
-
-      def self.build_hash
-        new.build_hash
-      end
-
-      def self.hash
-        cached_hash
-      end
-
-      def hash
-        self.class.hash
       end
 
       def build_hash
@@ -63,14 +40,6 @@ module Bp3
         return determine_model_name(model.descendants.first) if subclassed?(model)
 
         model.name
-      end
-
-      def sti_subclass?(model)
-        self.class.sti_subclass?(model)
-      end
-
-      def subclassed?(model)
-        self.class.subclassed?(model)
       end
     end
   end
