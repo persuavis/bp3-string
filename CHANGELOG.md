@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.3] - 2024-11-18
+
+- Relax gem constraints
+
 ## [0.1.2] - 2024-08-19
 
 - Use all ActionController descendents to populate the `TableControllerMap` hash.
