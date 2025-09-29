@@ -14,12 +14,8 @@ module Bp3
         end
 
         app.config.to_prepare do
-          if defined?(Bp3::String::TableModelMap)
-            Bp3::String::TableModelMap.reset_cached_hash
-          end
-          if defined?(Bp3::String::TableControllerMap)
-            Bp3::String::TableControllerMap.reset_cached_hash
-          end
+          Bp3::String::TableModelMap.reset_cached_hash if defined?(Bp3::String::TableModelMap)
+          Bp3::String::TableControllerMap.reset_cached_hash if defined?(Bp3::String::TableControllerMap)
         end
       end
     end
