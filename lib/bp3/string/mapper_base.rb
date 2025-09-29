@@ -12,7 +12,7 @@ module Bp3
       end
 
       def self.reset_cached_hash
-        @cached_hash = nil
+        raise(NotImplementedError, 'Must implement in subclass')
       end
 
       def self.build_hash

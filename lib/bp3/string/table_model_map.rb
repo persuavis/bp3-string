@@ -20,6 +20,12 @@ module Bp3
         end
       end
 
+      def self.reset_cached_hash
+        CACHED_HASH_MUTEX.synchronize do
+          @cached_hash = nil
+        end
+      end
+
       def build_hash
         encoding = 'string'.encoding # TODO: not sure why encoding sometimes doesn't match
         hash = {}

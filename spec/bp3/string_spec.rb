@@ -34,8 +34,7 @@ RSpec.describe Bp3::String do
     end
 
     it 'modelizes' do
-      allow(Bp3::String::TableModelMap).to receive(:testing?).and_return(false)
-
+      # allow(Bp3::String::TableModelMap).to receive(:testing?).and_return(false)
       expect('some_string'.modelize).to eq('SomeString')
       expect('test'.modelize).to eq('Test')
       expect('bp3_string_test'.modelize).to eq('Bp3::String::Test')
@@ -57,6 +56,22 @@ RSpec.describe Bp3::String do
     it 'controllerizes complex cases' do
       expect('test_space_test_models'.controllerize).to eq('TestSpace::TestModelsController')
       expect('test_space_test_model'.controllerize).to eq('TestSpace::TestModelsController')
+    end
+  end
+
+  describe '.reset_cache' do
+    it 'resets the controller-map cache' do
+      'string'.controllerize
+      expect(Bp3::String::TableControllerMap.instance_variable_get(:@cached_hash)).not_to be_nil
+      Bp3::String::TableControllerMap.reset_cached_hash
+      expect(Bp3::String::TableControllerMap.instance_variable_get(:@cached_hash)).to be_nil
+    end
+
+    it 'resets the model-map cache' do
+      'string'.modelize
+      expect(Bp3::String::TableModelMap.instance_variable_get(:@cached_hash)).not_to be_nil
+      Bp3::String::TableModelMap.reset_cached_hash
+      expect(Bp3::String::TableModelMap.instance_variable_get(:@cached_hash)).to be_nil
     end
   end
 end
