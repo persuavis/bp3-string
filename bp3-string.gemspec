@@ -32,8 +32,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'activerecord', '>= 8.0.3'
-  spec.add_dependency 'activesupport', '>= 8.0.3'
-  spec.add_dependency 'railties', '>= 8.0.3'
+  spec.add_dependency 'activesupport', '~> 8.1'
+  spec.add_dependency 'railties', '~> 8.1'
 
   spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'rake', '>= 13.0'
