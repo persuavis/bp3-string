@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.2.0] - 2026-01-12
+
+- Update dependencies to rails 8.0.3
+- Use to_prepare to reset cached hashes
+- Update gems
+
 ## [0.1.3] - 2024-11-18
 
 - Relax gem constraints
