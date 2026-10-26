@@ -17,7 +17,7 @@ module TestSpace
   end
 end
 
-# rubocop:disable RSpec/ExpectActual
+# rubocop:disable-next RSpec/ExpectActual
 RSpec.describe Bp3::String do
   before do
     String.include Bp3::String::Modelize
@@ -75,4 +75,3 @@ RSpec.describe Bp3::String do
     end
   end
 end
-# rubocop:enable RSpec/ExpectActual
